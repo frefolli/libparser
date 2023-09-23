@@ -11,7 +11,7 @@ Basically a BNF, in formal regular expression is something like this: `<non-term
 The branches can be evaluated from left to right or reverse, it doesn't matter untill it's coherent in the grammar.
 First of all we represent Symbols:
 
-```
+```c++
 union SymbolType {
   NonTerminal symbolNT;
   Terminal symbolT;
@@ -26,7 +26,7 @@ struct Symbol {
 Since the union stays in memories as the biggest of the two types declared, these must be chosen wisely.
 That reduces the BNF form to this:
 
-```
+```c++
 struct Production {
   NonTerminal symbol;
   std::vector<std::vector<Symbol>> branches;
@@ -41,7 +41,7 @@ For a Production to be defined as VALID, it SHALL_BE:
 
 Then the parser is defined as the collection of those Production statements. Since the left symbols are always non terminals we can easely write a map instead of a vector.
 
-```
+```c++
 struct Parser {
   std::map<NonTerminal, Production> productions;
   void process(std::vector<Token>::const_iterator begin,
