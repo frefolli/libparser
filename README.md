@@ -13,7 +13,7 @@ The library will depend upon the following INPUT abstractions from the Lexer par
 Eagerly we state `typedef Token Terminal`;
 
 and from those for the Parser part:
-- NonTerminal
+- `NonTerminal`
 
 ## Actual Discussion
 
@@ -39,12 +39,13 @@ That reduces the BNF form to this:
 
 ```c++
 struct Production {
-  NonTerminal symbol;
+  Symbol symbol;
   std::vector<std::vector<Symbol>> branches;
 }
 ```
 
 For a Production to be defined as VALID, it SHALL_BE:
+- `! Symbol.isTerminal`
 - `branches.size() > 0`
 - for_each(`branch` : `branches`)
   - `branch.size() > 0`
@@ -192,3 +193,7 @@ class List : public Node {
 ```
 
 They could be structs instead of classes, but since we want to rely on template deduction, this is probably a better approach. We are gonna use a flag attribute instead of `dynamic_cast` though. Finally we should keep in mind that these will be parametric structures against typename `NonTerminal`.
+
+## Compiler Tricks
+
+- `SMART_PRODUCTION_VALIDATION` enables the `Production::validate` member function to validate a production based on assumptions.
