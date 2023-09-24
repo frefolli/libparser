@@ -1,0 +1,6 @@
+#ifndef LIBPARSER_TESTS_PARSER_TOPDOWN_HH
+#define LIBPARSER_TESTS_PARSER_TOPDOWN_HH
+
+void TestParserTopDown();
+
+#endif

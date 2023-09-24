@@ -1,9 +1,10 @@
 #include "tests/symbol.hh"
 #include "tests/production.hh"
 #include "tests/parser.hh"
+#include "tests/parser_topdown.hh"
 #include <iostream>
 
-int main(int argc, char**args) {
+void PrintSignature() {
     std::cout << THE_PROJECT << " " <<
         THE_VERSION  << " (" <<
         THE_BRANCH << ", " <<
@@ -13,7 +14,12 @@ int main(int argc, char**args) {
         THE_COMPILER << ", " <<
         THE_ASSEMBLER << "] on " <<
         THE_OS << std::endl;
+}
+
+int main(int argc, char**args) {
+    PrintSignature();
     TestSymbol();
     TestProduction();
     TestParser();
+    TestParserTopDown();
 }

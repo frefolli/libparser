@@ -8,12 +8,13 @@
 #include <algorithm>
 
 template <typename Terminal, typename NonTerminal>
-struct Parser {
-    std::map<Symbol<Terminal, NonTerminal>, Production<Terminal, NonTerminal>> productions;
+class Parser {
+    protected:
+        std::map<Symbol<Terminal, NonTerminal>, Production<Terminal, NonTerminal>> productions;
 
     public:
-        Parser(std::vector<Production<Terminal, NonTerminal>> v) {
-            std::transform(v.begin(), v.end(), std::inserter(productions, productions.end()),
+        Parser(std::vector<Production<Terminal, NonTerminal>> grammar) {
+            std::transform(grammar.begin(), grammar.end(), std::inserter(productions, productions.end()),
                            [](const Production<Terminal, NonTerminal>& prod) { return std::make_pair(prod.getLeft(), prod); });
         }
 
