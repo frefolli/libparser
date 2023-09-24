@@ -1,0 +1,4 @@
+[wrap-git]
+directory = liblexer.git
+url = git@github.com:frefolli/liblexer.git
+revision = master
