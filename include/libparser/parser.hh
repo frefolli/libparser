@@ -4,7 +4,8 @@
 #include <libparser/symbol.hh>
 #include <libparser/production.hh>
 #include <map>
-#include <ostream>
+#include <sstream>
+#include <algorithm>
 
 template <typename Terminal, typename NonTerminal>
 struct Parser {
@@ -25,6 +26,6 @@ struct Parser {
             }
             return out.str();
         }
-}
+};
 
 #endif

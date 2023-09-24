@@ -9,16 +9,16 @@
 void TestParser() {
     std::cout << "TestParser::START" << std::endl;
     Parser<Terminal, NonTerminal> parser ({
-        {NonTerminal::EXPR, {
-            {NonTerminal::TERM},
-            {Terminal::LPAR, NonTerminal::EXPR, Terminal::RPAR},
-            {NonTerminal::EXPR, Terminal::ADD, NonTerminal::EXPR},
-            {NonTerminal::EXPR, Terminal::SUB, NonTerminal::EXPR},
-            {NonTerminal::EXPR, Terminal::MUL, NonTerminal::EXPR},
-            {NonTerminal::EXPR, Terminal::DIV, NonTerminal::EXPR}}},
-        {NonTerminal::TERM, {
-            {Terminal::INTEGER},
-            {Terminal::IDENTIFIER}}}
+        {EXPR, {
+            {TERM},
+            {LPAR, EXPR, RPAR},
+            {EXPR, ADD, EXPR},
+            {EXPR, SUB, EXPR},
+            {EXPR, MUL, EXPR},
+            {EXPR, DIV, EXPR}}},
+        {TERM, {
+            {INTEGER},
+            {IDENTIFIER}}}
     });
     std::cout << parser.toString() << std::endl;
     std::cout << "TestParser::END" << std::endl;

@@ -7,12 +7,6 @@ enum NonTerminal {
     TERM, EXPR
 };
 
-std::ostream& (std::ostream& out, NonTerminal nonTerminal) {
-    switch (nonTerminal) {
-        case NonTerminal::TERM : out << "TERM"; break;
-        case NonTerminal::EXPR : out << "EXPR"; break;
-    }
-    return out;
-}
+std::ostream& operator<<(std::ostream& out, NonTerminal nonTerminal);
 
 #endif

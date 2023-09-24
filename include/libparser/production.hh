@@ -3,7 +3,7 @@
 
 #include <libparser/symbol.hh>
 #include <vector>
-#include <ostream>
+#include <sstream>
 #include <cassert>
 
 template<typename Terminal, typename NonTerminal>
@@ -28,7 +28,7 @@ struct Production {
 
         std::string toString() const {
             std::ostringstream out ("");
-            out << symbol << " := ";
+            out << symbol.toString() << " := ";
             for (auto bIt = branches.begin(); bIt != branches.end(); bIt++) {
                 if (bIt != branches.begin())
                     out << " | ";
