@@ -8,7 +8,7 @@
 
 void TestParser() {
     std::cout << "TestParser::START" << std::endl;
-    Parser<Terminal, NonTerminal> parser ({
+    Parser<Terminal, NonTerminal, int> parser ({
         {EXPR, {
             {TERM},
             {LPAR, EXPR, RPAR},

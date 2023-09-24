@@ -1,8 +1,10 @@
+INCLUDE=$(shell find include -type f)
+SRC=$(shell find src -type f)
 EXE=./builddir/main.exe
 
 @all: ${EXE}
 
-${EXE}:
+${EXE}: ${INCLUDE} ${SRC}
 	meson setup builddir
 	ninja -C builddir
 

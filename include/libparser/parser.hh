@@ -7,15 +7,18 @@
 #include <sstream>
 #include <algorithm>
 
-template <typename Terminal, typename NonTerminal>
+template <typename Terminal, typename NonTerminal, typename Lexem>
 class Parser {
     protected:
-        std::map<Symbol<Terminal, NonTerminal>, Production<Terminal, NonTerminal>> productions;
+        std::map<NonTerminal, Production<Terminal, NonTerminal>> productions;
 
     public:
         Parser(std::vector<Production<Terminal, NonTerminal>> grammar) {
-            std::transform(grammar.begin(), grammar.end(), std::inserter(productions, productions.end()),
-                           [](const Production<Terminal, NonTerminal>& prod) { return std::make_pair(prod.getLeft(), prod); });
+            for (const Production<Terminal, NonTerminal>& production : grammar) {
+                productions[production.getLeft()] = production;
+            }
+            //std::transform(grammar.begin(), grammar.end(), std::inserter(productions, productions.end()),
+            //               [](const Production<Terminal, NonTerminal>& prod) { return std::make_pair(prod.getLeft(), prod); });
         }
 
         std::string toString() {

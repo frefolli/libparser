@@ -1,7 +1,7 @@
 project('libparser', 'cpp', version: 'master')
 
 # Features
-## add_global_arguments('-DSMART_PRODUCTION_VALIDATION', language : 'cpp')
+## add_global_arguments('-DBAN_LEFT_RECURSIVE', language : 'cpp')
 
 # Infos
 THE_ASSEMBLER = 'GAS'
@@ -30,11 +30,11 @@ add_global_arguments('-DTHE_VERSION="@0@"'.format(THE_VERSION), language : 'cpp'
 add_global_arguments('-DTHE_PROJECT="@0@"'.format(THE_PROJECT), language : 'cpp')
 
 # Future Dependencies
-#liblexer_dep = dependency(
-#  'liblexer',
-#  fallback: ['liblexer', 'liblexer_dep'],
-#  version: 'master',
-#)
+liblexer_dep = dependency(
+  'liblexer',
+  fallback: ['liblexer', 'liblexer_dep'],
+  version: 'master',
+)
 
 include = include_directories('include')
 
@@ -46,7 +46,9 @@ main = executable('main.exe', [
     'src/tests/parser_topdown.cc',
     'src/tests/terminal.cc',
     'src/tests/nonterminal.cc',
-  ], include_directories : include)
+    'src/tests/node.cc'
+  ], include_directories : include,
+  dependencies: [liblexer_dep])
 
 libparser_dep = declare_dependency(
   include_directories : include)

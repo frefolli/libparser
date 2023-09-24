@@ -196,4 +196,4 @@ They could be structs instead of classes, but since we want to rely on template 
 
 ## Compiler Tricks
 
-- `SMART_PRODUCTION_VALIDATION` enables the `Production::validate` member function to validate a production based on assumptions.
+- `BAN_LEFT_RECURSIVE` enables the `Production::validate` member function to validate a production based on assumption that you don't want a Left Recursive grammar for now.

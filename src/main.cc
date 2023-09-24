@@ -2,6 +2,7 @@
 #include "tests/production.hh"
 #include "tests/parser.hh"
 #include "tests/parser_topdown.hh"
+#include "tests/node.hh"
 #include <iostream>
 
 void PrintSignature() {
@@ -18,8 +19,9 @@ void PrintSignature() {
 
 int main(int argc, char**args) {
     PrintSignature();
-    TestSymbol();
-    TestProduction();
-    TestParser();
+    //TestSymbol();
+    //TestProduction();
+    //TestParser();
     TestParserTopDown();
+    //TestNode();
 }

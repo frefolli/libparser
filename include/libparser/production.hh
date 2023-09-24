@@ -8,11 +8,11 @@
 
 template<typename Terminal, typename NonTerminal>
 struct Production {
-    Symbol<Terminal, NonTerminal> symbol;
+    NonTerminal symbol;
     std::vector<std::vector<Symbol<Terminal, NonTerminal>>> branches;
 
     void validate() {
-#ifdef SMART_PRODUCTION_VALIDATION 
+#ifdef BAN_LEFT_RECURSIVE
         assert(! symbol.isTerminal);
         assert(branches.size() > 0);
         for (const std::vector<Symbol<Terminal, NonTerminal>>& branch) {
@@ -22,13 +22,14 @@ struct Production {
 #endif
     }
     public:
-        Production(Symbol<Terminal, NonTerminal> symbol,
+        Production() {}
+        Production(NonTerminal symbol,
                    std::vector<std::vector<Symbol<Terminal, NonTerminal>>> branches) :
             symbol(symbol), branches(branches) {}
 
         std::string toString() const {
             std::ostringstream out ("");
-            out << symbol.toString() << " := ";
+            out << symbol << " := ";
             for (auto bIt = branches.begin(); bIt != branches.end(); bIt++) {
                 if (bIt != branches.begin())
                     out << " | ";
@@ -41,8 +42,12 @@ struct Production {
             return out.str();
         }
 
-        Symbol<Terminal, NonTerminal> getLeft() const {
+        NonTerminal getLeft() const {
             return symbol;
+        }
+
+        std::vector<std::vector<Symbol<Terminal, NonTerminal>>>& getBranches() {
+            return branches;
         }
 };
 

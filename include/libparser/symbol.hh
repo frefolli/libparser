@@ -32,6 +32,13 @@ struct Symbol {
             return out.str();
         }
 
+        Terminal asTerminal() const {
+            return value.t;
+        }
+        NonTerminal asNonTerminal() const {
+            return value.nt;
+        }
+
         // for MAP but also in general to match lexems
         bool operator!=(Symbol other) {
             return !(this->operator==(other));
