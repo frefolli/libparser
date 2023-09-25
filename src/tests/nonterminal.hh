@@ -4,7 +4,7 @@
 #include <ostream>
 
 enum NonTerminal {
-    TERM, EXPR
+    LINE, TERM, EXPR, OP, LITERAL
 };
 
 std::ostream& operator<<(std::ostream& out, NonTerminal nonTerminal);

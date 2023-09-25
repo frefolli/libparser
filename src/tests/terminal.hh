@@ -4,7 +4,7 @@
 #include <ostream>
 
 enum Terminal {
-    IDENTIFIER, INTEGER, ADD, SUB, MUL, DIV, LPAR, RPAR
+    COMMENT, IDENTIFIER, INTEGER, ADD, SUB, MUL, DIV, LPAR, RPAR, SPACE
 };
 
 std::ostream& operator<<(std::ostream& out, Terminal terminal);

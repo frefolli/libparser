@@ -11,6 +11,8 @@ std::ostream& operator<<(std::ostream& out, Terminal terminal) {
         case Terminal::DIV : out << "DIV"; break;
         case Terminal::LPAR : out << "LPAR"; break;
         case Terminal::RPAR : out << "RPAR"; break;
+        case Terminal::SPACE : out << "SPACE"; break;
+        case Terminal::COMMENT : out << "COMMENT"; break;
     }
     return out;
 }

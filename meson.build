@@ -46,7 +46,8 @@ main = executable('main.exe', [
     'src/tests/parser_topdown.cc',
     'src/tests/terminal.cc',
     'src/tests/nonterminal.cc',
-    'src/tests/node.cc'
+    'src/tests/node.cc',
+    'src/tests/calc.cc'
   ], include_directories : include,
   dependencies: [liblexer_dep])
 
