@@ -3,7 +3,7 @@
 
 #include <string>
 
-template <typename NonTerminal>
+template <typename Terminal, typename NonTerminal>
 class Node {
     protected:
         unsigned int lexemCount = 0;

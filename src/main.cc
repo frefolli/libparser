@@ -1,9 +1,4 @@
-//#include "tests/symbol.hh"
-//#include "tests/production.hh"
-//#include "tests/parser.hh"
-//#include "tests/parser_topdown.hh"
-//#include "tests/node.hh"
-#include "tests/calc.hh"
+#include "tests/parser_clr.hh"
 #include <iostream>
 
 void PrintSignature() {
@@ -20,10 +15,5 @@ void PrintSignature() {
 
 int main(int argc, char**args) {
     PrintSignature();
-    //TestSymbol();
-    //TestProduction();
-    //TestParser();
-    //TestParserTopDown();
-    //TestNode();
-    RunCalc();
+    TestParserCLR();
 }

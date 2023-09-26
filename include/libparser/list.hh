@@ -6,21 +6,21 @@
 #include <libparser/node.hh>
 
 // lexemCount = sum([node.lexemCount for node in children])
-template <typename NonTerminal>
-class List : public Node<NonTerminal> {
+template <typename Terminal, typename NonTerminal>
+class List : public Node<Terminal, NonTerminal> {
     private:
         NonTerminal head;
-        std::vector<Node<NonTerminal>*> children;
+        std::vector<Node<Terminal, NonTerminal>*> children;
     public:
         List(NonTerminal head,
-             std::vector<Node<NonTerminal>*> children) :
+             std::vector<Node<Terminal, NonTerminal>*> children) :
             head(head), children(children) {
-            for (const Node<NonTerminal>* child : children) {
+            for (const Node<Terminal, NonTerminal>* child : children) {
                 this->lexemCount += child->getLexemCount();
             }
         }
         ~List() {
-            for (const Node<NonTerminal>* child : children) {
+            for (const Node<Terminal, NonTerminal>* child : children) {
                 if (child)
                     delete child;
             }
@@ -34,11 +34,14 @@ class List : public Node<NonTerminal> {
         std::string toString() const {
             std::ostringstream out ("");
             out << "(" << head;
-            for (const Node<NonTerminal>* child : children) {
+            for (const Node<Terminal, NonTerminal>* child : children) {
                 out << " " << child->toString();
             }
             out << ")";
             return out.str();
+        }
+        NonTerminal getHead() const {
+            return head;
         }
 };
 

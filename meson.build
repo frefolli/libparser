@@ -40,6 +40,7 @@ include = include_directories('include')
 
 main = executable('main.exe', [
     'src/main.cc',
+    'src/tests/lexem.cc',
     'src/tests/symbol.cc',
     'src/tests/production.cc',
     'src/tests/parser.cc',

@@ -5,11 +5,12 @@
 #include <libparser/node.hh>
 #include <libparser/atom.hh>
 #include <libparser/list.hh>
+#include <iostream>
 
 template <typename Terminal, typename NonTerminal, typename Lexem>
 class ParserCLR : public Parser<Terminal, NonTerminal, Lexem> {
     private:
-        bool tryReduce(std::vector<void*>* queue) {
+        bool tryReduce(std::vector<Node<Terminal, NonTerminal>*>* queue) {
             for (auto production : this->productions) {
                 for (auto branch : production.branches) {
                     if (matchBranchToQueue(queue, &branch)) {
@@ -20,7 +21,7 @@ class ParserCLR : public Parser<Terminal, NonTerminal, Lexem> {
             return false;
         }
 
-        bool matchBranchToQueue(std::vector<void*>* queue,
+        bool matchBranchToQueue(std::vector<Node<Terminal, NonTerminal>*>* queue,
                                 std::vector<Symbol<Terminal, NonTerminal>>* branch) {
             auto qIt = queue->end() - 1;
             auto bIt = branch->end() - 1;
@@ -35,20 +36,8 @@ class ParserCLR : public Parser<Terminal, NonTerminal, Lexem> {
             return true;
         }
 
-        bool compareSymbolAndQueue(void* ptr,
+        bool compareSymbolAndQueue(Node<Terminal, NonTerminal>* ptr,
                                    Symbol<Terminal, NonTerminal>& symbol) {
-            if (Lexem* lexem = dynamic_cast<Lexem*>(ptr)) {
-                if (!symbol.isTerminal)
-                    return false;
-                return symbol.getTerminal() == lexem->getToken();
-            } else if (Node<NonTerminal>* node = dynamic_cast<Node<NonTerminal>*>(ptr)) {
-                if (symbol.isTerminal)
-                    return false;
-                if (node.isAtom())
-                    return false;
-                List<NonTerminal>* list = (List<NonTerminal>*) node;
-                return symbol.getNonTerminal() == list->getHead();
-            }
             return false;
         }
 
@@ -56,26 +45,38 @@ class ParserCLR : public Parser<Terminal, NonTerminal, Lexem> {
         ParserCLR(std::vector<Production<Terminal, NonTerminal>> grammar) :
             Parser<Terminal, NonTerminal, Lexem>(grammar) {}
         
-        List<NonTerminal>* process(NonTerminal target,
+        List<Terminal, NonTerminal>* process(NonTerminal target,
                                   typename std::vector<Lexem>::iterator begin,
                                   typename std::vector<Lexem>::iterator end) {
+            std::cout << "process-target :: " << target << std::endl;
             auto it = begin;
-            std::vector<void*> queue = {};
+            std::vector<Node<Terminal, NonTerminal>*> queue = {};
             while (it != end) {
-                queue.push_back(*(begin++));
+                auto lexem = *(it++);
+                std::cout << "load-lexem :: " << lexem.toString() << std::endl;
+                queue.push_back(new Atom<Terminal, NonTerminal>(lexem.getString(), lexem.getToken()));
             }
             
             if (queue.size() != 1) {
-                for (auto ptr : queue) {
-                    if (Lexem* lexem = dynamic_cast<Lexem*>(ptr)) {
-                        delete lexem;
-                    } else if (Node<NonTerminal>* node = dynamic_cast<Node<NonTerminal>*>(ptr)) {
-                        delete node;
-                    }
+                for (auto node : queue) {
+                    std::cout << "purge-node :: " << node->toString() << std::endl;
+                    delete node;
                 }
                 return nullptr;
             }
-            return queue[0];
+
+            if (! queue[0]->isList()) {
+                delete queue[0];
+                return nullptr;
+            }
+
+            List<Terminal, NonTerminal>* list = (List<Terminal, NonTerminal>*) queue[0];
+            if (list->getHead() != target) {
+                delete list;
+                return nullptr;
+            }
+
+            return list;
         }
 };
 

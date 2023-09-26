@@ -1,3 +1,4 @@
+#include "lexem.hh"
 #include "parser_topdown.hh"
 #include "terminal.hh"
 #include "nonterminal.hh"
@@ -6,21 +7,6 @@
 #include <libparser/parser_topdown.hh>
 #include <liblexer/lexem.hh>
 #include <iostream>
-
-std::ostream& operator<<(std::ostream& out, std::vector<Lexem<Terminal>> lexems) {
-    bool first = false;
-    out << "{";
-    for (const Lexem<Terminal>& lexem : lexems) {
-        if (first) {
-            first = true;
-        } else {
-            out << " ";
-        }
-        out << lexem.toString();
-    }
-    out << "}";
-    return out;
-}
 
 void TestParserTopDown() {
     std::cout << "# Input Lexem Stream:" << std::endl;
@@ -47,7 +33,7 @@ void TestParserTopDown() {
     });
     std::cout << parser.toString() << std::endl << std::endl;
 
-    List<NonTerminal>* cst = parser.process_symbol(EXPR, input.begin(), input.end());
+    List<Terminal, NonTerminal>* cst = parser.process_symbol(EXPR, input.begin(), input.end());
     if (cst) {
         std::cout << "# Concrete Syntax Tree:" << std::endl;
         std::cout << cst->toString() << std::endl;

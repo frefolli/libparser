@@ -47,7 +47,7 @@ ParserTopDown<Terminal, NonTerminal, Lexem<Terminal>> parser ({
 void RunCalc() {
     std::string line;
     std::vector<Lexem<Terminal>> lexems;
-    List<NonTerminal>* cst = nullptr;
+    List<Terminal, NonTerminal>* cst = nullptr;
     bool active = true;
     while (active) {
         std::cout << ">> ";

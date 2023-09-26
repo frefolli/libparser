@@ -1,4 +1,5 @@
 #include "node.hh"
+#include "terminal.hh"
 #include "nonterminal.hh"
 
 #include <iostream>
@@ -8,13 +9,13 @@
 
 void TestNode() {
     std::cout << "TestSymbol::START" << std::endl;
-    Node<NonTerminal>* node = new List<NonTerminal>(EXPR, {
-        new List<NonTerminal>(TERM, {new Atom<NonTerminal>("17")}),
-        new Atom<NonTerminal>("*"),
-        new List<NonTerminal>(EXPR, {
-            new List<NonTerminal>(TERM, {new Atom<NonTerminal>("x")}),
-            new Atom<NonTerminal>("-"),
-            new List<NonTerminal>(TERM, {new Atom<NonTerminal>("19")})
+    Node<Terminal, NonTerminal>* node = new List<Terminal, NonTerminal>(EXPR, {
+        new List<Terminal, NonTerminal>(TERM, {new Atom<Terminal, NonTerminal>("17", INTEGER)}),
+        new Atom<Terminal, NonTerminal>("*", MUL),
+        new List<Terminal, NonTerminal>(EXPR, {
+            new List<Terminal, NonTerminal>(TERM, {new Atom<Terminal, NonTerminal>("x", IDENTIFIER)}),
+            new Atom<Terminal, NonTerminal>("-", SUB),
+            new List<Terminal, NonTerminal>(TERM, {new Atom<Terminal, NonTerminal>("19", INTEGER)})
         })
     });
     std::cout << node->toString() << std::endl;

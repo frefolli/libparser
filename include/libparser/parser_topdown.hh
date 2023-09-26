@@ -9,20 +9,20 @@
 template <typename Terminal, typename NonTerminal, typename Lexem>
 class ParserTopDown : public Parser<Terminal, NonTerminal, Lexem> {
     private:
-        std::vector<Node<NonTerminal>*> process_branch(const std::vector<Symbol<Terminal, NonTerminal>>& branch,
+        std::vector<Node<Terminal, NonTerminal>*> process_branch(const std::vector<Symbol<Terminal, NonTerminal>>& branch,
                                           typename std::vector<Lexem>::iterator begin,
                                           typename std::vector<Lexem>::iterator end) const {
-            std::vector<Node<NonTerminal>*> children = {};
+            std::vector<Node<Terminal, NonTerminal>*> children = {};
             for (auto it = branch.begin();
                  it != branch.end(); ++it) {
                 if (it->isTerminal) {
-                    Atom<NonTerminal>* child = process_lexem(it->asTerminal(), begin, end);
+                    Atom<Terminal, NonTerminal>* child = process_lexem(it->asTerminal(), begin, end);
                     if (!child)
                         return {};
                     begin += child->getLexemCount();
                     children.push_back(child);
                 } else {
-                    List<NonTerminal>* child = process_symbol(it->asNonTerminal(), begin, end);
+                    List<Terminal, NonTerminal>* child = process_symbol(it->asNonTerminal(), begin, end);
                     if (!child)
                         return {};
                     begin += child->getLexemCount();
@@ -32,14 +32,14 @@ class ParserTopDown : public Parser<Terminal, NonTerminal, Lexem> {
             return children;
         }
 
-        Atom<NonTerminal>* process_lexem(Terminal target,
+        Atom<Terminal, NonTerminal>* process_lexem(Terminal target,
                                          typename std::vector<Lexem>::iterator begin,
                                          typename std::vector<Lexem>::iterator end) const {
             if (begin == end)
                 return nullptr;
             Lexem& lexem = *begin;
             if (lexem.getToken() == target)
-                return new Atom<NonTerminal>(lexem.getString());
+                return new Atom<Terminal, NonTerminal>(lexem.getString(), lexem.getToken());
             return nullptr;
         }
 
@@ -47,14 +47,14 @@ class ParserTopDown : public Parser<Terminal, NonTerminal, Lexem> {
         ParserTopDown(std::vector<Production<Terminal, NonTerminal>> grammar) :
             Parser<Terminal, NonTerminal, Lexem>(grammar) {}
 
-        List<NonTerminal>* process_symbol(NonTerminal target,
+        List<Terminal, NonTerminal>* process_symbol(NonTerminal target,
                             typename std::vector<Lexem>::iterator begin,
                             typename std::vector<Lexem>::iterator end) const {
             for (auto it = this->productions.at(target).branches.begin();
                  it != this->productions.at(target).branches.end(); ++it) {
                 auto result = process_branch(*it, begin, end);
                 if (result.size() > 0)
-                    return new List<NonTerminal>(target, result);
+                    return new List<Terminal, NonTerminal>(target, result);
             }
             return nullptr;
         }
