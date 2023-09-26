@@ -44,6 +44,7 @@ main = executable('main.exe', [
     'src/tests/production.cc',
     'src/tests/parser.cc',
     'src/tests/parser_topdown.cc',
+    'src/tests/parser_clr.cc',
     'src/tests/terminal.cc',
     'src/tests/nonterminal.cc',
     'src/tests/node.cc',
