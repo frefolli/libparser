@@ -12,8 +12,8 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
     private:
         bool tryReduce(std::vector<Node<Terminal, NonTerminal>*>* queue) {
             for (auto production : this->productions) {
-                for (auto branch : production.branches) {
-                    if (matchBranchToQueue(queue, &branch, production.left)) {
+                for (auto branch : production.second.branches) {
+                    if (matchBranchToQueue(queue, &branch, production.first)) {
                         return true;
                     }
                 }
@@ -24,20 +24,26 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
         bool matchBranchToQueue(std::vector<Node<Terminal, NonTerminal>*>* queue,
                                 std::vector<Symbol<Terminal, NonTerminal>>* branch,
                                 NonTerminal target) {
+            if (branch->size() == 0 || queue->size() == 0)
+                return false;
+            if (branch->size() > queue->size())
+                return false;
+
             auto qIt = queue->end() - 1;
             auto bIt = branch->end() - 1;
-            auto qBegin = queue->begin();
-            auto bBegin = branch->begin();
+            auto qBegin = queue->begin() - 1;
+            auto bBegin = branch->begin() - 1;
             while(qIt != qBegin && bIt != bBegin) {
-                if (! compareSymbolAndQueue(*qIt, *bIt))
+                if (! compareSymbolAndQueue(*qIt, *bIt)) {
                     return false;
+                }
                 qIt--;
                 bIt--;
             }
             
             if (bIt == bBegin) {
-                auto qEnd = branch->end();
-                spliceQueue(target, queue, qIt, qEnd);
+                auto qEnd = queue->end();
+                spliceQueue(target, queue, std::distance(qIt, qEnd) - 1);
                 return true;
             }
             return false;
@@ -45,18 +51,18 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
 
         bool compareSymbolAndQueue(Node<Terminal, NonTerminal>* node,
                                    Symbol<Terminal, NonTerminal>& symbol) {
-            if (symbol->isTerminal) {
+            if (symbol.isTerminal) {
                 if (! node->isAtom()) {
                     return false;
                 }
                 Atom<Terminal, NonTerminal>* atom = (Atom<Terminal, NonTerminal>*) node; 
-                return atom->getTerminal() != symbol->getTerminal();
+                return atom->getTerminal() == symbol.asTerminal();
             } else {
                 if (! node->isList()) {
                     return false;
                 }
                 List<Terminal, NonTerminal>* list = (List<Terminal, NonTerminal>*) node; 
-                return list->getHead() != symbol->getNonTerminal();
+                return list->getHead() == symbol.asNonTerminal();
             }
             return false;
         }
@@ -64,13 +70,12 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
         void spliceQueue(NonTerminal target,
                          std::vector<Node<Terminal, NonTerminal>*>* queue,
                          unsigned int length) {
-            //
             std::vector<Node<Terminal, NonTerminal>*> children = {};
             for (unsigned int i = 0; i < length; i++) {
                 children.insert(children.begin(), queue->back());
                 queue->pop_back();
             }
-            queue->push_back(new List<Terminal, NonTerminal>(targetm children));
+            queue->push_back(new List<Terminal, NonTerminal>(target, children));
         }
 
     public:
@@ -80,18 +85,19 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
         List<Terminal, NonTerminal>* process(NonTerminal target,
                                   typename std::vector<Lexem>::iterator begin,
                                   typename std::vector<Lexem>::iterator end) {
-            std::cout << "process-target :: " << target << std::endl;
+
             auto it = begin;
             std::vector<Node<Terminal, NonTerminal>*> queue = {};
             while (it != end) {
+                while(tryReduce(&queue));
                 auto lexem = *(it++);
-                std::cout << "load-lexem :: " << lexem.toString() << std::endl;
+
                 queue.push_back(new Atom<Terminal, NonTerminal>(lexem.getString(), lexem.getToken()));
+                while(tryReduce(&queue));
             }
             
             if (queue.size() != 1) {
                 for (auto node : queue) {
-                    std::cout << "purge-node :: " << node->toString() << std::endl;
                     delete node;
                 }
                 return nullptr;

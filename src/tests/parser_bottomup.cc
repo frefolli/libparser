@@ -22,10 +22,10 @@ void TestParserBottomUp() {
     std::cout << "# Parser Top Down:" << std::endl;
     ParserBottomUp<Terminal, NonTerminal, Lexem<Terminal>> parser ({
         {EXPR, {
-            {TERM, ADD, EXPR},
-            {TERM, SUB, EXPR},
-            {TERM, MUL, EXPR},
-            {TERM, DIV, EXPR},
+            {EXPR, ADD, EXPR},
+            {EXPR, SUB, EXPR},
+            {EXPR, MUL, EXPR},
+            {EXPR, DIV, EXPR},
             {TERM}}},
         {TERM, {
             {INTEGER},
