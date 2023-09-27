@@ -1,5 +1,5 @@
-#ifndef LIBPARSER_PARSER_CLR_HH
-#define LIBPARSER_PARSER_CLR_HH
+#ifndef LIBPARSER_PARSER_BOTTOMUP_HH
+#define LIBPARSER_PARSER_BOTTOMUP_HH
 
 #include <libparser/parser.hh>
 #include <libparser/node.hh>
@@ -8,12 +8,12 @@
 #include <iostream>
 
 template <typename Terminal, typename NonTerminal, typename Lexem>
-class ParserCLR : public Parser<Terminal, NonTerminal, Lexem> {
+class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
     private:
         bool tryReduce(std::vector<Node<Terminal, NonTerminal>*>* queue) {
             for (auto production : this->productions) {
                 for (auto branch : production.branches) {
-                    if (matchBranchToQueue(queue, &branch)) {
+                    if (matchBranchToQueue(queue, &branch, production.left)) {
                         return true;
                     }
                 }
@@ -22,7 +22,8 @@ class ParserCLR : public Parser<Terminal, NonTerminal, Lexem> {
         }
 
         bool matchBranchToQueue(std::vector<Node<Terminal, NonTerminal>*>* queue,
-                                std::vector<Symbol<Terminal, NonTerminal>>* branch) {
+                                std::vector<Symbol<Terminal, NonTerminal>>* branch,
+                                NonTerminal target) {
             auto qIt = queue->end() - 1;
             auto bIt = branch->end() - 1;
             auto qBegin = queue->begin();
@@ -33,16 +34,47 @@ class ParserCLR : public Parser<Terminal, NonTerminal, Lexem> {
                 qIt--;
                 bIt--;
             }
-            return true;
-        }
-
-        bool compareSymbolAndQueue(Node<Terminal, NonTerminal>* ptr,
-                                   Symbol<Terminal, NonTerminal>& symbol) {
+            
+            if (bIt == bBegin) {
+                auto qEnd = branch->end();
+                spliceQueue(target, queue, qIt, qEnd);
+                return true;
+            }
             return false;
         }
 
+        bool compareSymbolAndQueue(Node<Terminal, NonTerminal>* node,
+                                   Symbol<Terminal, NonTerminal>& symbol) {
+            if (symbol->isTerminal) {
+                if (! node->isAtom()) {
+                    return false;
+                }
+                Atom<Terminal, NonTerminal>* atom = (Atom<Terminal, NonTerminal>*) node; 
+                return atom->getTerminal() != symbol->getTerminal();
+            } else {
+                if (! node->isList()) {
+                    return false;
+                }
+                List<Terminal, NonTerminal>* list = (List<Terminal, NonTerminal>*) node; 
+                return list->getHead() != symbol->getNonTerminal();
+            }
+            return false;
+        }
+
+        void spliceQueue(NonTerminal target,
+                         std::vector<Node<Terminal, NonTerminal>*>* queue,
+                         unsigned int length) {
+            //
+            std::vector<Node<Terminal, NonTerminal>*> children = {};
+            for (unsigned int i = 0; i < length; i++) {
+                children.insert(children.begin(), queue->back());
+                queue->pop_back();
+            }
+            queue->push_back(new List<Terminal, NonTerminal>(targetm children));
+        }
+
     public:
-        ParserCLR(std::vector<Production<Terminal, NonTerminal>> grammar) :
+        ParserBottomUp(std::vector<Production<Terminal, NonTerminal>> grammar) :
             Parser<Terminal, NonTerminal, Lexem>(grammar) {}
         
         List<Terminal, NonTerminal>* process(NonTerminal target,

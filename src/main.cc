@@ -1,4 +1,4 @@
-#include "tests/parser_clr.hh"
+#include "tests/parser_bottomup.hh"
 #include <iostream>
 
 void PrintSignature() {
@@ -15,5 +15,5 @@ void PrintSignature() {
 
 int main(int argc, char**args) {
     PrintSignature();
-    TestParserCLR();
+    TestParserBottomUp();
 }

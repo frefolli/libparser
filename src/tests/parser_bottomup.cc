@@ -1,14 +1,14 @@
 #include "lexem.hh"
-#include "parser_clr.hh"
+#include "parser_bottomup.hh"
 #include "terminal.hh"
 #include "nonterminal.hh"
 #include <libparser/symbol.hh>
 #include <libparser/production.hh>
-#include <libparser/parser_clr.hh>
+#include <libparser/parser_bottomup.hh>
 #include <liblexer/lexem.hh>
 #include <iostream>
 
-void TestParserCLR() {
+void TestParserBottomUp() {
     std::cout << "# Input Lexem Stream:" << std::endl;
     std::vector<Lexem<Terminal>> input = {
         {"17", INTEGER},
@@ -20,7 +20,7 @@ void TestParserCLR() {
     std::cout << input << std::endl << std::endl;
 
     std::cout << "# Parser Top Down:" << std::endl;
-    ParserCLR<Terminal, NonTerminal, Lexem<Terminal>> parser ({
+    ParserBottomUp<Terminal, NonTerminal, Lexem<Terminal>> parser ({
         {EXPR, {
             {TERM, ADD, EXPR},
             {TERM, SUB, EXPR},

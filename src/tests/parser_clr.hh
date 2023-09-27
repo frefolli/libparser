@@ -1,6 +1,0 @@
-#ifndef LIBPARSER_TESTS_PARSER_CLR_HH
-#define LIBPARSER_TESTS_PARSER_CLR_HH
-
-void TestParserCLR();
-
-#endif
