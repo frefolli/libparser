@@ -5,6 +5,7 @@
 #include <libparser/node.hh>
 #include <libparser/atom.hh>
 #include <libparser/list.hh>
+#include <libparser/error.hh>
 #include <iostream>
 
 template <typename Terminal, typename NonTerminal, typename Lexem>
@@ -100,18 +101,18 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
                 for (auto node : queue) {
                     delete node;
                 }
-                return nullptr;
+                throw ParserError<Terminal, NonTerminal, Lexem>("unable to reduce");
             }
 
             if (! queue[0]->isList()) {
                 delete queue[0];
-                return nullptr;
+                throw ParserError<Terminal, NonTerminal, Lexem>("top is not a list");
             }
 
             List<Terminal, NonTerminal>* list = (List<Terminal, NonTerminal>*) queue[0];
             if (list->getHead() != target) {
                 delete list;
-                return nullptr;
+                throw ParserError<Terminal, NonTerminal, Lexem>("wrong target");
             }
 
             return list;

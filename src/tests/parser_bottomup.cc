@@ -19,7 +19,7 @@ void TestParserBottomUp() {
     };
     std::cout << input << std::endl << std::endl;
 
-    std::cout << "# Parser Top Down:" << std::endl;
+    std::cout << "# Parser Bottom Up:" << std::endl;
     ParserBottomUp<Terminal, NonTerminal, Lexem<Terminal>> parser ({
         {EXPR, {
             {EXPR, ADD, EXPR},
