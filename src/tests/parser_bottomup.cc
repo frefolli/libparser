@@ -33,7 +33,7 @@ void TestParserBottomUp() {
     });
     std::cout << parser.toString() << std::endl << std::endl;
 
-    List<Terminal, NonTerminal>* cst = parser.process(EXPR, input.begin(), input.end());
+    List<Terminal, NonTerminal>* cst = parser.process_symbol(EXPR, input.begin(), input.end());
     if (cst) {
         std::cout << "# Concrete Syntax Tree:" << std::endl;
         std::cout << cst->toString() << std::endl;

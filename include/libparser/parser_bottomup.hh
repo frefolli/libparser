@@ -10,7 +10,7 @@
 template <typename Terminal, typename NonTerminal, typename Lexem>
 class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
     private:
-        bool tryReduce(std::vector<Node<Terminal, NonTerminal>*>* queue) {
+        bool tryReduce(std::vector<Node<Terminal, NonTerminal>*>* queue) const {
             for (auto production : this->productions) {
                 for (auto branch : production.second.branches) {
                     if (matchBranchToQueue(queue, &branch, production.first)) {
@@ -23,7 +23,7 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
 
         bool matchBranchToQueue(std::vector<Node<Terminal, NonTerminal>*>* queue,
                                 std::vector<Symbol<Terminal, NonTerminal>>* branch,
-                                NonTerminal target) {
+                                NonTerminal target) const {
             if (branch->size() == 0 || queue->size() == 0)
                 return false;
             if (branch->size() > queue->size())
@@ -50,7 +50,7 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
         }
 
         bool compareSymbolAndQueue(Node<Terminal, NonTerminal>* node,
-                                   Symbol<Terminal, NonTerminal>& symbol) {
+                                   Symbol<Terminal, NonTerminal>& symbol) const {
             if (symbol.isTerminal) {
                 if (! node->isAtom()) {
                     return false;
@@ -69,7 +69,7 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
 
         void spliceQueue(NonTerminal target,
                          std::vector<Node<Terminal, NonTerminal>*>* queue,
-                         unsigned int length) {
+                         unsigned int length) const {
             std::vector<Node<Terminal, NonTerminal>*> children = {};
             for (unsigned int i = 0; i < length; i++) {
                 children.insert(children.begin(), queue->back());
@@ -81,10 +81,10 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
     public:
         ParserBottomUp(std::vector<Production<Terminal, NonTerminal>> grammar) :
             Parser<Terminal, NonTerminal, Lexem>(grammar) {}
-        
-        List<Terminal, NonTerminal>* process(NonTerminal target,
+       
+        List<Terminal, NonTerminal>* process_symbol(NonTerminal target,
                                   typename std::vector<Lexem>::iterator begin,
-                                  typename std::vector<Lexem>::iterator end) {
+                                  typename std::vector<Lexem>::iterator end) const {
 
             auto it = begin;
             std::vector<Node<Terminal, NonTerminal>*> queue = {};

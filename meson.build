@@ -43,7 +43,6 @@ main = executable('main.exe', [
     'src/tests/lexem.cc',
     'src/tests/symbol.cc',
     'src/tests/production.cc',
-    'src/tests/parser.cc',
     'src/tests/parser_topdown.cc',
     'src/tests/parser_bottomup.cc',
     'src/tests/terminal.cc',
