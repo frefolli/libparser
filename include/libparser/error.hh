@@ -10,7 +10,7 @@ class ParserError : public std::runtime_error {
         std::string message;
     public:
         ParserError(std::string message) : std::runtime_error("") {
-            this->message = "Parser Error" + message;
+            this->message = "Parser Error: " + message;
         }
         const char* what() {
             return this->message.c_str();
