@@ -3,6 +3,7 @@
 
 #include <libparser/symbol.hh>
 #include <libparser/production.hh>
+#include <libparser/list.hh>
 #include <map>
 #include <sstream>
 #include <algorithm>
@@ -30,6 +31,11 @@ class Parser {
             }
             return out.str();
         }
+
+        virtual List<Terminal, NonTerminal>* process_symbol(
+                NonTerminal target,
+                typename std::vector<Lexem>::iterator begin,
+                typename std::vector<Lexem>::iterator end) const = 0;
 };
 
 #endif
