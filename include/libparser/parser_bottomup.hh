@@ -99,7 +99,6 @@ class ParserBottomUp : public Parser<Terminal, NonTerminal, Lexem> {
             
             if (queue.size() != 1) {
                 for (auto node : queue) {
-                    std::cerr << node->toString() << std::endl;
                     delete node;
                 }
                 throw ParserError<Terminal, NonTerminal, Lexem>("unable to reduce");
